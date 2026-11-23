@@ -1,0 +1,27 @@
+digraph lab7 {
+  graph [rankdir=LR, bgcolor="white", fontname="Arial", fontsize=16, label="Лабораторная 7 — Deployment: локальный HTTPS и GitHub Pages", labelloc=t, pad=0.25, nodesep=0.55, ranksep=0.8];
+  node [shape=box, style="rounded,filled", color="#E2E5E9", fillcolor="#F4F5F7", fontname="Arial", fontcolor="#1F2429", fontsize=11];
+  edge [color="#374151", fontname="Arial", fontsize=10];
+  phone [label="Телефон / Chrome\nPWA React\nRedux, Router, SW"];
+  desktop [label="Браузер ноутбука\nReact, Redux, Router"];
+  subgraph cluster_github {
+    label="Облако GitHub"; color="#E2E5E9"; style="rounded";
+    pages [label="GitHub Pages / CDN\nСтатический React + JS/CSS\n5 mock-услуг\nManifest + SW",fillcolor="#FFFFFF"];
+  }
+  subgraph cluster_laptop {
+    label="Ноутбук (Windows, LAN)"; color="#9CA3AF"; style="rounded";
+    nodeproxy [label="Node.js HTTPS :8443\nTLS, static dist/\nReverse Proxy /api /s3",fillcolor="#FFFFFF"];
+    go [label="Go / Gin :8080\nREST /api/auth/*\nREST /api/uninterruptible-power-supplies/*",fillcolor="#FFFFFF"];
+    db [label="PostgreSQL :5433\nУслуги / атрибуты / Media"];
+    redis [label="Redis :6379\nJWT / guest session"];
+    minio [label="MinIO :9000\nS3 / ups-media"];
+  }
+  phone -> pages [label="HTTPS :443\nPWA offline mock",color="#6B7280"];
+  phone -> nodeproxy [label="HTTPS :8443\nWi-Fi / IP ноутбука",color="#1F2429",penwidth=2];
+  desktop -> nodeproxy [label="HTTPS :8443"];
+  nodeproxy -> go [label="HTTP /api/*\n:8080"];
+  nodeproxy -> minio [label="HTTP /s3/* → /*\nS3 :9000"];
+  go -> db [label="PostgreSQL TCP :5433"];
+  go -> redis [label="Redis TCP :6379"];
+  go -> minio [label="S3 API HTTP :9000"];
+}

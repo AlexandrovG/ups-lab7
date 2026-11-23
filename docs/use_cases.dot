@@ -1,0 +1,21 @@
+digraph Lab6 {
+  graph [rankdir=LR, bgcolor="white", pad="0.3", nodesep="0.34", ranksep="0.9", label="Варианты использования интерфейса React · Каталог ИБП", labelloc=t, fontsize=18, fontname="DejaVu Sans"];
+  node [fontname="DejaVu Sans", fontsize=12];
+  edge [fontname="DejaVu Sans", fontsize=10, color="#374151", arrowsize=0.65];
+  guest [shape=box, style="rounded,filled", fillcolor="#F4F5F7", color="#1F2429", label="Гость"];
+  user [shape=box, style="rounded,filled", fillcolor="#E2E5E9", color="#1F2429", label="Авторизованный\nпользователь"];
+  subgraph cluster_ui {
+    label="React / Redux Toolkit"; fontsize=14; fontname="DejaVu Sans"; color="#E2E5E9"; style="rounded";
+    node [shape=ellipse, style=filled, color="#1F2429", fillcolor="#F4F5F7", fontcolor="#1F2429"];
+    list [label="Просмотр плитки\nи ленты"];
+    filter [label="Фильтр по ёмкости"];
+    details [label="Просмотр свойств\nИБП"];
+    sign_in [label="Вход через Axios"];
+    create [label="Создание и\nпубликация ИБП"];
+    like [label="Лайк услуги"];
+    remove [label="Удаление своей\nуслуги"];
+    sign_out [label="Выход и сброс\nфильтра"];
+  }
+  guest -> {list filter details sign_in};
+  user -> {list filter details create like remove sign_out};
+}

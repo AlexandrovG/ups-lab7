@@ -1,0 +1,10 @@
+import {spawnSync} from 'node:child_process';
+const repo=(process.argv[2] || process.env.GITHUB_REPOSITORY?.split('/')[1] || 'ups-lab7').trim();
+if(!/^[A-Za-z0-9._-]+$/.test(repo)) throw new Error('Invalid GitHub repository name');
+const base=repo.endsWith('.github.io')?'/':`/${repo}/`;
+const windows = process.platform === 'win32';
+const command = windows ? 'cmd.exe' : 'npm';
+const args = windows ? ['/d','/s','/c','npm run build'] : ['run','build'];
+const r=spawnSync(command,args,{stdio:'inherit',env:{...process.env,VITE_DEMO_MODE:'1',VITE_BASE_PATH:base}});
+if(r.error) throw r.error;
+process.exit(r.status??1);
